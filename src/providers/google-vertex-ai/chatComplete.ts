@@ -359,8 +359,8 @@ export const VertexGoogleChatCompleteConfig: ProviderConfig = {
                         tool.function?.parameters,
                     );
                     delete tool.function?.strict;
-                    // here, a simple `!tool.function.parameters?.type` check allows users to use the same name of google tools
-                    if (googleTools.includes(tool.function.name) && !tool.function.parameters?.type) {
+                    // here, a simple parameter.type and description check allows users to use the same name of google tools
+                    if (googleTools.includes(tool.function.name) && !(tool.function.parameters?.type || tool.function.description)) {
                         tools.push(...transformGoogleTools(tool));
                     } else {
                         functionDeclarations.push(tool.function);
