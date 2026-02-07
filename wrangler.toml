@@ -19,10 +19,11 @@ CUSTOM_HEADERS_TO_IGNORE = []
 
 
 #
-#Configuration for PRODUCTION environment
+# Production on custom domain (portkey.pollinations.ai)
+# Uses pollinations.ai zone proxy_read_timeout (600s) instead of workers.dev default (~100s)
 #
 [env.production]
-name = "rubeus"
+name = "rubeus-pollinations"
 logpush=true
 routes = [
     { pattern = "portkey.pollinations.ai", custom_domain = true }
