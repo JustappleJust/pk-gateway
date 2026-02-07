@@ -24,6 +24,9 @@ CUSTOM_HEADERS_TO_IGNORE = []
 [env.production]
 name = "rubeus"
 logpush=true
+routes = [
+    { pattern = "portkey.pollinations.ai", custom_domain = true }
+]
 
 [env.production.vars]
 ENVIRONMENT = 'production'
