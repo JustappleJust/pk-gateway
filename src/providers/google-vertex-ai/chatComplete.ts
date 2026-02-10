@@ -215,6 +215,14 @@ export const VertexGoogleChatCompleteConfig: ProviderConfig = {
                                         },
                                     });
                                 }
+                            } else if (c.type === "executable_code") {
+                                parts.push({
+                                    executableCode: c.executable_code,
+                                });
+                            } else if (c.type === "code_execution_result") {
+                                parts.push({
+                                    codeExecutionResult: c.code_execution_result,
+                                });
                             }
                         });
                     } else if (typeof message.content === "string") {
@@ -351,6 +359,7 @@ export const VertexGoogleChatCompleteConfig: ProviderConfig = {
                         tool.function?.parameters,
                     );
                     delete tool.function?.strict;
+
                     if (googleTools.includes(tool.function.name)) {
                         tools.push(...transformGoogleTools(tool));
                     } else {
@@ -596,6 +605,16 @@ export const GoogleChatCompleteResponseTransform: (
                                 image_url: {
                                     url: `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`,
                                 },
+                            });
+                        } else if (part.executableCode) {
+                            contentBlocks.push({
+                                type: "executable_code",
+                                executable_code: part.executableCode,
+                            });
+                        } else if (part.codeExecutionResult) {
+                            contentBlocks.push({
+                                type: "code_execution_result",
+                                code_execution_result: part.codeExecutionResult,
                             });
                         }
                     }
