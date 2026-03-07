@@ -65,9 +65,10 @@ export function splitString(input: string, separator: string): SplitResult {
 
 /*
   Transforms the finish reason from the provider to the finish reason used by the OpenAI API.
-  If the finish reason is not found in the map, it will return the stop reason.
-  If the strictOpenAiCompliance is true, it will return the finish reason from the map.
-  If the strictOpenAiCompliance is false, it will return the finish reason from the provider.
+  Always normalizes finish_reason to OpenAI format regardless of strictOpenAiCompliance,
+  since finish_reason is a core part of OpenAI compatibility (not an extra field).
+  If the finish reason is not found in the map, it falls back to the raw value
+  (or "stop" when strictOpenAiCompliance is true).
   NOTE: this function always returns a finish reason
 */
 export const transformFinishReason = (
@@ -75,10 +76,9 @@ export const transformFinishReason = (
   strictOpenAiCompliance?: boolean
 ): FINISH_REASON | PROVIDER_FINISH_REASON => {
   if (!finishReason) return FINISH_REASON.stop;
-  if (!strictOpenAiCompliance) return finishReason;
   const transformedFinishReason = finishReasonMap.get(finishReason);
   if (!transformedFinishReason) {
-    return FINISH_REASON.stop;
+    return strictOpenAiCompliance ? FINISH_REASON.stop : finishReason;
   }
   return transformedFinishReason;
 };
